@@ -6,20 +6,19 @@ import generateToken from "./generateToken.js";
 
 export default async function userRouter(fastify, options) {
   fastify.post("/signup", async (request, reply) => {
-    let { name, surname, email, password } = request.body;
-    name = name.trim();
-    surname = surname.trim();
+    let { username, email, password } = request.body;
+    username = username.trim();
     email = email.trim();
     password = password.trim();
 
-    if (name === "" || surname === "" || password === "" || email === "") {
+    if (username === "" || password === "" || email === "") {
       return reply.code(400).send({
         status: "FAILED",
         message: "Empty input fields",
       });
     }
 
-    if (!/^[a-zA-Z]*$/.test(name)) {
+    if (!/^[a-zA-Z]*$/.test(username)) {
       return reply.code(400).send({
         status: "FAILED",
         message: "Invalid name entered",
@@ -58,8 +57,7 @@ export default async function userRouter(fastify, options) {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       const newUser = {
-        name,
-        surname,
+        username,
         email,
         password: hashedPassword,
       };
@@ -77,7 +75,7 @@ export default async function userRouter(fastify, options) {
       return reply.code(200).send({
         status: "SUCCESS",
         message: "Signup successful",
-        data: { name, surname, email },
+        data: { username, email },
         accessToken: token,
       });
     } catch (error) {
@@ -91,6 +89,7 @@ export default async function userRouter(fastify, options) {
 
   fastify.post("/signin", async (request, reply) => {
     dotenv.config();
+
     let { email, password } = request.body;
 
     email = email?.trim();
@@ -134,7 +133,6 @@ export default async function userRouter(fastify, options) {
           email: user.email,
         },
         accessToken: accessToken,
-        refreshToken: refreshToken,
       });
     } catch (error) {
       fastify.log.error(error);
