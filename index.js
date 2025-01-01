@@ -2,12 +2,14 @@ import Fastify from "fastify";
 import { connectToDB } from "./utils/database.js";
 import userRouter from "./routes/auth/users.js";
 import authenticateToken from "./middleware/authenticateToken.js";
+import exerciseRoutes from "./routes/exercise/exerciseRoutes.js";
 
 const fastify = Fastify({ logger: true });
 
 await connectToDB();
 
 fastify.register(userRouter, { prefix: "/users" });
+fastify.register(exerciseRoutes);
 
 fastify.get("/", { preHandler: authenticateToken }, async (request, reply) => {
   const posts = [
