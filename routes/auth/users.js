@@ -62,21 +62,17 @@ export default async function userRouter(fastify, options) {
         password: hashedPassword,
       };
 
-      const createdUser = await UserModel.create(newUser);
+      await UserModel.create(newUser);
 
-      const token = jwt.sign(
-        { id: createdUser._id, email },
-        process.env.ACCESS_TOKEN_SECRET,
-        {
-          expiresIn: "1h",
-        }
-      );
+      const accessToken = await generateToken(newUser, "access", "15m");
+      const refreshToken = await generateToken(newUser, "refresh", "7d");
 
       return reply.code(200).send({
         status: "SUCCESS",
         message: "Signup successful",
         data: { username, email },
-        accessToken: token,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       });
     } catch (error) {
       fastify.log.error(error);
@@ -133,6 +129,7 @@ export default async function userRouter(fastify, options) {
           email: user.email,
         },
         accessToken: accessToken,
+        refreshToken: refreshToken,
       });
     } catch (error) {
       fastify.log.error(error);

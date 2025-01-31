@@ -1,16 +1,6 @@
 import mongoose from "mongoose";
 const { Schema, model, models } = mongoose;
 
-// interface IExercise extends mongoose.Document {
-//   exerciseName: string;
-//   equipmentType: Types.ObjectId;
-//   primaryMuscleGroup: Types.ObjectId;
-//   secondaryMuscleGroups: Types.ObjectId[];
-//   description?: string;
-//   imageUrl?: string;
-//   instructions?: string[];
-// }
-// <IExercise>
 const ExercisesSchema = new Schema(
   {
     exerciseName: { type: String, required: true },
@@ -27,13 +17,13 @@ const ExercisesSchema = new Schema(
     secondaryMuscleGroups: [
       { type: Schema.Types.ObjectId, ref: "MuscleGroup", required: true },
     ],
-    description: { type: String },
-    imageUrl: { type: String },
-    instructions: [{ type: String }],
+    description: { type: String, default: null },
+    imageUrl: { type: String, default: null },
+    instructions: { type: [String], default: null },
   },
   { timestamps: true }
 );
-// <IExercise>
+
 const ExerciseModel = models.Exercises || model("Exercises", ExercisesSchema);
 
 export default ExerciseModel;
