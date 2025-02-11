@@ -12,6 +12,7 @@ const EquipmentSchema = new Schema(
   {
     equipmentName: { type: String, required: true, unique: true },
     description: { type: String },
+    imageUrl: { type: String, default: null },
   },
   { timestamps: true }
 );

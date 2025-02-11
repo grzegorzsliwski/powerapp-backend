@@ -6,14 +6,15 @@ import authenticateToken from "../middleware/authenticateToken.js";
 export default async function exerciseRouter(fastify, opts) {
   fastify.get(
     "/list",
-    { preHandler: authenticateToken },
+    // { preHandler: authenticateToken },
     async (request, reply) => {
       try {
         const exercises = await ExerciseModel.find({})
-          .populate("primaryMuscleGroup", "muscleGroupName")
+          .populate("primaryMuscleGroup", "muscleGroupName imageUrl")
           .populate("secondaryMuscleGroups", "muscleGroupName")
-          .populate("equipmentType", "equipmentName");
-
+          .populate("equipmentType", "equipmentName")
+          .populate("variantType", "variantName");
+        console.log(exercises);
         reply.code(200).send(exercises);
       } catch (error) {
         fastify.log.error(error);
@@ -31,7 +32,8 @@ export default async function exerciseRouter(fastify, opts) {
         const exercise = await ExerciseModel.findById(id)
           .populate("equipmentType", "equipmentName")
           .populate("primaryMuscleGroup", "muscleGroupName")
-          .populate("secondaryMuscleGroups", "muscleGroupName");
+          .populate("secondaryMuscleGroups", "muscleGroupName")
+          .populate("variantType", "variantName");
 
         if (!exercise) {
           return reply.code(404).send({ message: "Exercise not found." });

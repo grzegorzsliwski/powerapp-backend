@@ -9,13 +9,18 @@ const ExercisesSchema = new Schema(
       ref: "Equipment",
       required: true,
     },
+    variantType: {
+      type: Schema.Types.ObjectId,
+      ref: "Variant",
+      required: true,
+    },
     primaryMuscleGroup: {
       type: Schema.Types.ObjectId,
       ref: "MuscleGroup",
       required: true,
     },
     secondaryMuscleGroups: [
-      { type: Schema.Types.ObjectId, ref: "MuscleGroup", required: true },
+      { type: Schema.Types.ObjectId, ref: "MuscleGroup" },
     ],
     description: { type: String, default: null },
     imageUrl: { type: String, default: null },

@@ -18,6 +18,7 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    imageUrl: { type: String, default: null },
   },
   { minimize: false }
 );
