@@ -5,6 +5,7 @@ import authenticateToken from "./middleware/authenticateToken.js";
 import exerciseRouter from "./routes/exercise.js";
 import filtersRouter from "./routes/filters.js";
 import VariantModel from "./models/Variant.js";
+import programRouter from "./routes/program.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -13,6 +14,7 @@ await connectToDB();
 fastify.register(filtersRouter, { prefix: "/filters" });
 fastify.register(userRouter, { prefix: "/users" });
 fastify.register(exerciseRouter, { prefix: "/exercises" });
+fastify.register(programRouter, { prefix: "/program" });
 
 fastify.post("/create", async (request, reply) => {
   try {

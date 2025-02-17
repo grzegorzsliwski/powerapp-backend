@@ -4,24 +4,20 @@ import ExerciseModel from "../models/Exercises.js";
 import authenticateToken from "../middleware/authenticateToken.js";
 
 export default async function exerciseRouter(fastify, opts) {
-  fastify.get(
-    "/list",
-    // { preHandler: authenticateToken },
-    async (request, reply) => {
-      try {
-        const exercises = await ExerciseModel.find({})
-          .populate("primaryMuscleGroup", "muscleGroupName imageUrl")
-          .populate("secondaryMuscleGroups", "muscleGroupName")
-          .populate("equipmentType", "equipmentName")
-          .populate("variantType", "variantName");
-        console.log(exercises);
-        reply.code(200).send(exercises);
-      } catch (error) {
-        fastify.log.error(error);
-        reply.code(500).send({ message: "Failed to fetch exercises." });
-      }
+  fastify.get("/list", async (request, reply) => {
+    try {
+      const exercises = await ExerciseModel.find({})
+        .select("exerciseName imageUrl _id")
+        .populate("primaryMuscleGroup", "muscleGroupName -_id")
+        .populate("equipmentType", "equipmentName -_id")
+        .populate("variantType", "variantName -_id");
+
+      reply.code(200).send(exercises);
+    } catch (error) {
+      fastify.log.error(error);
+      reply.code(500).send({ message: "Failed to fetch exercises." });
     }
-  );
+  });
 
   fastify.get(
     "/:id",
