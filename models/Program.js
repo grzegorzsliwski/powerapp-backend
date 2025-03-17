@@ -13,6 +13,12 @@ const ProgramSchema = new Schema(
       min: [1, "Number of weeks must be at least 1"],
       max: [21, "Number of weeks cannot exceed 21"],
     },
+    sessions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Session",
+      },
+    ],
   },
   { timestamps: true }
 );

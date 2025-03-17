@@ -1,5 +1,4 @@
-// routes/program.routes.js
-import ProgramModel from "../models/Program.js";
+import ProgramModel from "../../models/Program.js";
 
 export default async function programRouter(fastify) {
   // Get all programs
@@ -15,7 +14,13 @@ export default async function programRouter(fastify) {
   fastify.get("/:id", async (request, reply) => {
     try {
       const { id } = request?.params;
-      const program = await ProgramModel.findById(id);
+      const program = await ProgramModel.findById(id).populate({
+        path: "sessions",
+        select: "sessionName exercises",
+        populate: {
+          path: "exercises",
+        },
+      });
 
       if (!program) {
         return reply.code(404).send({ message: "Program not found." });

@@ -5,7 +5,8 @@ import authenticateToken from "./middleware/authenticateToken.js";
 import exerciseRouter from "./routes/exercise.js";
 import filtersRouter from "./routes/filters.js";
 import VariantModel from "./models/Variant.js";
-import programRouter from "./routes/program.js";
+import programRouter from "./routes/program/program.js";
+import sessionRouter from "./routes/program/session/session.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -15,6 +16,7 @@ fastify.register(filtersRouter, { prefix: "/filters" });
 fastify.register(userRouter, { prefix: "/users" });
 fastify.register(exerciseRouter, { prefix: "/exercises" });
 fastify.register(programRouter, { prefix: "/program" });
+fastify.register(sessionRouter, { prefix: "/program/session" });
 
 fastify.post("/create", async (request, reply) => {
   try {

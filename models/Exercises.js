@@ -31,4 +31,6 @@ const ExercisesSchema = new Schema(
 
 const ExerciseModel = models.Exercises || model("Exercises", ExercisesSchema);
 
+export { ExercisesSchema };
+
 export default ExerciseModel;
